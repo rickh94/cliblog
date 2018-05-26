@@ -25,6 +25,8 @@ def cli(ctx):
 @click.pass_context
 def post(ctx, title, category, tag):
     repo = git.Repo(ctx.obj['path'])
+    origin = repo.remotes.origin
+    origin.pull()
     today = datetime.datetime.today()
     new_post = today.strftime("%Y-%m-%d") + '-' + '-'.join(title.split()) + '.md'
     for atag in tag:
@@ -52,3 +54,4 @@ def post(ctx, title, category, tag):
     subprocess.run([editor, postpath])
     repo.index.add([str(postpath)])
     repo.index.commit(f"Add Post {title} with tags {tags} and category {category}")
+    origin.push()
