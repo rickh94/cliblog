@@ -19,7 +19,8 @@ setup(
     setup_requires=['pytest-runner'],
     install_requires=[
         'ruamel.yaml',
-        'click'
+        'click',
+        'prompt_toolkit'
     ],
     tests_require=['pytest', 'pytest-cov'],
     package=find_packages(),
