@@ -30,6 +30,7 @@ class CEAValidator(Validator):
             raise ValidationError(message="Response must be [c]ommit, [e]dit, or [a]bort",
                                   cursor_position=0)
 
+
 @cli.command()
 @click.argument("title")
 @click.option("-c", "--category", prompt=True, help="Choose a category for the blog")
@@ -68,11 +69,11 @@ def post(ctx, title, category, tag, preview):
     while True:
         subprocess.run([editor, postpath])
         if preview:
-            oldpwd = os.getcwd()
+            old_pwd = os.getcwd()
             os.chdir(ctx.obj['path'])
             subprocess.run(['bundle', 'exec', 'jekyll', 'serve'], stdout=subprocess.PIPE)
             webbrowser.open("http://localhost:4000/")
-            os.chdir(oldpwd)
+            os.chdir(old_pwd)
         done = prompt("You can [e]dit the post more, [c]ommit and post, or [a]bort "
                       "without committing or posting. ", validator=CEAValidator())
         if done.lower()[0] == 'c':
