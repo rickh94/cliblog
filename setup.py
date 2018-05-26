@@ -16,13 +16,11 @@ setup(
 
     license='MIT',
     python_requires='>=3.6',
-    setup_requires=['pytest-runner'],
     install_requires=[
         'ruamel.yaml',
         'click',
         'prompt_toolkit'
     ],
-    tests_require=['pytest', 'pytest-cov'],
     package=find_packages(),
     entry_points={
         'console_scripts': [
