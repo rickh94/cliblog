@@ -1,5 +1,9 @@
+import atexit
+import time
+
 import datetime
 import os
+import signal
 import webbrowser
 from pathlib import Path
 import subprocess
@@ -66,14 +70,17 @@ def post(ctx, title, category, tag, preview):
         postfile.write(f"tags: {tags}\n")
         postfile.write("---\n")
     editor = os.environ['EDITOR'] or 'vim'
+    if preview:
+        old_pwd = os.getcwd()
+        os.chdir(ctx.obj['path'])
+        proc = subprocess.Popen(['bundle', 'exec', 'jekyll', 'serve'], stdout=subprocess.PIPE)
+        time.sleep(3)
+        atexit.register(os.kill, proc.pid, signal.SIGTERM)
+        os.chdir(old_pwd)
     while True:
         subprocess.run([editor, postpath])
         if preview:
-            old_pwd = os.getcwd()
-            os.chdir(ctx.obj['path'])
-            subprocess.run(['bundle', 'exec', 'jekyll', 'serve'], stdout=subprocess.PIPE)
             webbrowser.open("http://localhost:4000/")
-            os.chdir(old_pwd)
         done = prompt("You can [e]dit the post more, [c]ommit and post, or [a]bort "
                       "without committing or posting. ", validator=CEAValidator())
         if done.lower()[0] == 'c':
