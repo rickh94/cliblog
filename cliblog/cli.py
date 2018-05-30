@@ -47,7 +47,8 @@ def post(ctx, title, category, tag, preview):
     origin = repo.remotes.origin
     origin.pull()
     today = datetime.datetime.today()
-    new_post = today.strftime("%Y-%m-%d-") + '-'.join(title.split()) + '.md'
+    clean_title = title.replace('/','-')
+    new_post = today.strftime("%Y-%m-%d-") + '-'.join(clean_title.split()) + '.md'
     for atag in tag:
         tag_page = Path(ctx.obj['path'], 'tag', atag + '.html')
         if not tag_page.exists():
